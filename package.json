@@ -28,6 +28,7 @@
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",
     "logs:prod": "heroku logs --tail"
   },
+  "proxy": "http://localhost:3001",
   
   "eslintConfig": {
     "extends": [
@@ -46,6 +47,7 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+    
   },
   "devDependencies": {
     "nodemon": "^2.0.16"
