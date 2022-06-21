@@ -30,6 +30,8 @@ const requestLogger = (request, response, next) => {
   next()
 } // esto es justamente un midware
 
+// app.use(express.static('build'))
+
 app.use(express.json())
 
 app.use(requestLogger)
