@@ -50,16 +50,5 @@
   "devDependencies": {
     "nodemon": "^2.0.16"
   },
-  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/NicolasH97-27/NotesHeroku.git"
-  },
-  "author": "Nico",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/NicolasH97-27/NotesHeroku/issues"
-  },
-  "homepage": "https://github.com/NicolasH97-27/NotesHeroku#readme"
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app)."
 }

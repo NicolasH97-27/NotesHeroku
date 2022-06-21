@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const cors = require('cors')
+
 let notes = [
   {
     id: 1,
@@ -30,10 +30,6 @@ const requestLogger = (request, response, next) => {
   next()
 } // esto es justamente un midware
 
-
-app.use(cors()) //el puerto de react es 3000 y el del servidor es 3001, hay politica que no se permite
-                //el acceso cruzado
-app.use(express.static('build'))//que se fije en el build
 app.use(express.json())
 
 app.use(requestLogger)
@@ -101,7 +97,7 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint)
 
-const PORT = process.env.PORT || 3001
+const PORT = 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
