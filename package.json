@@ -26,7 +26,8 @@
     "build:ui": "rm -rf build && npm run build --prod",
     "deploy": "git push heroku main",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",
-    "logs:prod": "heroku logs --tail"
+    "logs:prod": "heroku logs --tail",
+    "start:lau": "node index.js"
   },
   "proxy": "http://localhost:3001",
   
