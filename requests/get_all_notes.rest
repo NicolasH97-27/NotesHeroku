@@ -1,0 +1,20 @@
+Get http://localhost:3001/api/persons
+
+###
+Get http://localhost:3001/api/persons/1
+
+###
+
+DELETE http://localhost:3001/notes/5
+
+###
+
+POST http://localhost:3001/notes
+Content-Type: application/json
+
+{
+  "id": 5,
+  "content": "HTgrhrhrh    rghrhr  hrhr   easy",
+  "date": "2022-01-10T17:30:31.098Z",
+  "important": true
+}
