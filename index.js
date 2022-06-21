@@ -33,7 +33,7 @@ const requestLogger = (request, response, next) => {
 
 app.use(cors()) //el puerto de react es 3000 y el del servidor es 3001, hay politica que no se permite
                 //el acceso cruzado
-
+app.use(express.static('build'))//que se fije en el build
 app.use(express.json())
 
 app.use(requestLogger)
