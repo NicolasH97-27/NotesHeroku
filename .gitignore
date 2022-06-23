@@ -7,9 +7,12 @@
 .env
 # testing
 /coverage
+/Tutorial-Notas
 
 # production
 /build
+
+
 
 # misc
 .DS_Store
