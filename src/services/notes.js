@@ -13,16 +13,19 @@ const create = newObject => {
     return request.then(response => response.data)
   }
   
-  const update = (id, newObject) => {
-    const request = axios.put(`${baseUrl}/${id}`, newObject)
-    return request.then(response => response.data)
-  }
+const update = (id, newObject) => {
+  const request = axios.put(`${baseUrl}/${id}`, newObject)
+  return request.then(response => response.data)
+}
+
+
   
-  
-  export default { 
+  const metodos = { 
     getAll: getAll, 
+
     create: create, //Dado que los nombres de las claves y las variables asignadas son los mismos, 
                     //podemos escribir la definición del objeto con una sintaxis más compacta: {getAll,create,update}
     update: update 
   }
 
+  export default metodos;
