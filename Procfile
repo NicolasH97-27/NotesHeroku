@@ -1,1 +1,1 @@
-web: npm run start:lau
+web: npm run start

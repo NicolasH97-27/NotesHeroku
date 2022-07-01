@@ -10,11 +10,15 @@ import Note from "./components/Note";
 import Button from "./components/Button";
 import Notification from "./components/Notification";
 import ToggleSwitch from "./components/ToggleSwitch";
+import NoteForm from './components/NoteForm'
+import LoginForm from './components/LoginForm'
+import Togglable from './components/Togglable'
 
 
 import ReactDOM from 'react-dom';
 import React, { useState, useEffect} from 'react'
 import noteService from './services/notes'
+import loginService from './services/login'
 
 
 const App = () => {
@@ -22,6 +26,11 @@ const App = () => {
   const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState('escribi tranquilo...')
+  const [username, setUsername] = useState('') 
+  const [password, setPassword] = useState('')
+  const [user, setUser] = useState(null)
+
+
 
   const hook = () => {
     noteService
@@ -33,29 +42,55 @@ const App = () => {
 
 
   useEffect(hook,[]) 
-
   
-
-  const toggleImportanceOf = id => {
- 
-    // const url = `http://localhost:3001/notes/${id}`
-    const note = notes.find(n => n.id === id)
-    const changedNote = { ...note, important: !note.important }
-    //En la práctica, {... note} crea un nuevo objeto con copias de todas las propiedades del objeto note
-  
-    noteService
-    .update(id, changedNote)
-    .then(returnedNote => {
-      setNotes(notes.map(note => note.id !== id ? note : returnedNote))
-    })
-    setErrorMessage(
-      `Note '${note.content}' cambio su importancia`//con $se ecribe comentario
-    ) 
-        setTimeout(() => { //te muestra cuanto tiempo aparece el mensaje xdxdxdxd
-          setErrorMessage(null)
-        }, 5000)
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      noteService.setToken(user.token)
+    }
+  }, [])
+  const handleLogin = async (event) => {
+    event.preventDefault()
+    try {
+      const user = await loginService.login({
+        username, password,
+      })
+      setUser(user)
+      noteService.setToken(user.token)
+      window.localStorage.setItem(
+        'loggedNoteappUser', JSON.stringify(user)
+      ) 
+      setUsername('')
+      setPassword('')
+    } catch (exception) {
+      setErrorMessage('wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
   }
 
+  const toggleImportanceOf = id => {
+    const note = notes.find(n => n.id === id)
+    const changedNote = { ...note, important: !note.important }
+  
+    noteService
+      .update(id, changedNote)
+      .then(returnedNote => {
+        setNotes(notes.map(note => note.id !== id ? note : returnedNote))
+      })
+      .catch(error => {
+        setErrorMessage(
+          `Note '${note.content}' cambio su importancia`
+        )
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+        setNotes(notes.filter(n => n.id !== id))
+      })
+  }
   const notesToShow = showAll
     ? notes
     : notes.filter(note => note.important === true)
@@ -80,6 +115,7 @@ const App = () => {
     console.log(event.target.value)
     setNewNote(event.target.value)
   }
+    
   return (
     <body>
       <div >
@@ -88,25 +124,37 @@ const App = () => {
       
       <Notification  message={errorMessage} />
 
-      <form onSubmit={addNote} action="#"  name="formNotas">
-	      <label for="mensaje">Notas</label>
-	      <textarea  value={newNote} onChange={handleNoteChange} name="mensaje" for="mensaje" maxlength="300"></textarea>
-        <input   type="submit" name="enviar" value="enviar notas"/>
-        
-        
-        {/* <input  type="checkbox" className="ButtonToShow" onClick={() => setShowAll(!showAll)}>
-          
-        </input > */}
+      
+      {user === null ?
+        <Togglable buttonLabel='login'>
+        <LoginForm
+          username={username}
+          password={password}
+          handleUsernameChange={({ target }) => setUsername(target.value)}
+          handlePasswordChange={({ target }) => setPassword(target.value)}
+          handleSubmit={handleLogin}
+        />
+      </Togglable> :
+        <div>
+          <p>{user.name} logged in</p>
+          <Togglable buttonLabel="new note">
+            <NoteForm
+              onSubmit={addNote}
+              value={newNote}
+              onChange={handleNoteChange}
+              accion={setShowAll}
+              
+            />
+          </Togglable>
+        </div>
+      }
+
+      {/* PUEDO SACAR ESTO Y PONERLO EN OTRO COMPONENTE ? LOS FORMULARIOS */}
       <ToggleSwitch
           accion={() => setShowAll(!showAll)}
           colorOff="gray"
           colorOn="black"
       />
-          
-
-      </form> 
-      
-      {/* el que toma accion sobre lo que se escribe en text area es onChange */}
      
       <ul className="Notas">
         
